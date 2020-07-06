@@ -102,19 +102,19 @@ public:
     void moveTo(double angle) {
         if(angleInRangeInclusive(angle, minAngle, maxAngle)) {
             double angleToGoal = subtractAngle(angle, currentAbsolutePosition());
-
-            // Handle bounds preventing us from taking shortest movement to goal
-            if(angleToGoal > 0) {
-                if(angleInRangeExclusive(minAngle, currentAbsolutePosition(), angle) && angleInRangeExclusive(maxAngle, currentAbsolutePosition(), angle)) {
-                    angleToGoal = ANGLE_UNITS_PER_REV - angleToGoal;
+            if(angleToGoal != 0) {
+                // Handle bounds preventing us from taking shortest movement to goal
+                if(angleToGoal > 0) {
+                    if(angleInRangeExclusive(minAngle, currentAbsolutePosition(), angle) && angleInRangeExclusive(maxAngle, currentAbsolutePosition(), angle)) {
+                        angleToGoal = ANGLE_UNITS_PER_REV - angleToGoal;
+                    }
+                } else {
+                    if(angleInRangeExclusive(minAngle, angle, currentAbsolutePosition()) && angleInRangeExclusive(maxAngle, angle, currentAbsolutePosition())) {
+                        angleToGoal = ANGLE_UNITS_PER_REV - angleToGoal;
+                    }
                 }
-            } else {
-                if(angleInRangeExclusive(minAngle, angle, currentAbsolutePosition()) && angleInRangeExclusive(maxAngle, angle, currentAbsolutePosition())) {
-                    angleToGoal = ANGLE_UNITS_PER_REV - angleToGoal;
-                }
+                move(angleToGoal);
             }
-
-            move(angleToGoal);
         } else {
             Serial.println("WARNING: Commanded angle outside of limits");
         }
