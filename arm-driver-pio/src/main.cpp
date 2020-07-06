@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <ArduinoJson.h>
 #include <AccelStepper.h>
 #include "angle_stepper.h"
 
@@ -17,7 +18,7 @@ AngleStepper upperRight = AngleStepper(4076, 360, true, AccelStepper::MotorInter
 AngleStepper* allSteppers[] = {&lowerLeft, &lowerRight, &upperLeft, &upperRight};
 const int NUM_STEPPERS = sizeof(allSteppers) / sizeof(AngleStepper*);
 
-bool first_run = true;
+StaticJsonDocument<31> doc;
 
 /**
  * Calls each stepper's run() function.
@@ -42,6 +43,16 @@ void disableAll() {
 		stepper->disableOutputs();
 	}
 }
+
+/**
+ * Enables all steppers
+**/
+void enableAll() {
+	for(auto& stepper : allSteppers) {
+		stepper->enableOutputs();
+	}
+}
+
 
 void sendStatus() {
 	Serial.println("LOWER");
@@ -165,24 +176,49 @@ void testMinMaxAnglesBigBounds() {
 void setup()
 {
 	Serial.begin(115200);
+	while(!Serial) continue;
 	Serial.print("Initializing arm with ");
-	Serial.print(NUM_STEPPERS);
+	Serial.print(NUM_STEPPERS, DEC);
 	Serial.println(" steppers");
 
 	for(auto& stepper : allSteppers) {
-		stepper->setMaxSpeed(90);
-		stepper->setAcceleration(90);
+		stepper->setMaxSpeed(40);
+		stepper->setAcceleration(40);
 		stepper->setCurrentPosition(0);
+		stepper->setMinAngle(270);
+		stepper->setMaxAngle(90);
 	}
 
 	Serial.println("Finished initialization");
-
-
 
 	disableAll();
 }
 
 void loop()
 {
-	testAbsoluteMotion();
+	if(Serial.read() == 's') {
+		DeserializationError error = deserializeJson(doc, Serial);
+		if(error) {
+			Serial.print("Deserialization failed: ");
+			Serial.println(error.c_str());
+			return;
+		} else {
+			enableAll();
+
+			double lowerAngle = doc["angles"][0];
+			double upperAngle = doc["angles"][1];
+			lowerLeft.moveTo(lowerAngle);
+			lowerRight.moveTo(lowerAngle);
+			upperLeft.moveTo(upperAngle);
+			upperRight.moveTo(upperAngle);
+			// Serial.print("Lower: ");
+			// Serial.println(lowerAngle);
+			// Serial.print("Upper: ");
+			// Serial.println(upperAngle);
+		}
+	}
+	
+	if(!runAll()) {
+		disableAll();
+	}
 }
