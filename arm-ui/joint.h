@@ -61,6 +61,9 @@ class Joint {
 	Position getBasePosition(const Joint *relativeTo) const;
 	Position getBasePosition() const;
 
+	Joint *getBase() const;
+	Joint *getEnd() const;
+
 	static void link(Joint *prev, Joint *next);
 
 };

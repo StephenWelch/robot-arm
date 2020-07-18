@@ -95,3 +95,19 @@ void Joint::link(Joint *prev, Joint *next) {
 	prev->setNext(next);
 	next->setPrevious(prev);
 }
+
+Joint *Joint::getBase() const {
+	Joint* current = getPrevious();
+	if(current != nullptr && current->getPrevious() != nullptr) {
+		current = current->getPrevious();
+	}
+	return current;
+}
+
+Joint *Joint::getEnd() const {
+	Joint* current = getNext();
+	if(current != nullptr && current->getNext() != nullptr) {
+		current = current->getNext();
+	}
+	return current;
+}
