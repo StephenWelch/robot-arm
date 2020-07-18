@@ -111,3 +111,9 @@ Joint *Joint::getEnd() const {
 	}
 	return current;
 }
+
+void Joint::solve(Joint* relativeTo, const Joint &targetPos) {
+	Joint *end = relativeTo->getEnd();
+
+	end->setAngle(targetPos.getAngle());
+}

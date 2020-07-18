@@ -69,7 +69,7 @@ else()
     position.h
     geometry.h
     mainwindow.ui
-  )
+          arc.cpp arc.h)
 endif()
 
 target_link_libraries(arm-ui PRIVATE nlohmann_json::nlohmann_json Qt5::Widgets Qt5::SerialPort)

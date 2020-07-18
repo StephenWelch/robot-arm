@@ -65,6 +65,7 @@ class Joint {
 	Joint *getEnd() const;
 
 	static void link(Joint *prev, Joint *next);
+	static void solve(Joint *relativeTo, const Joint &targetPos);
 
 };
 
