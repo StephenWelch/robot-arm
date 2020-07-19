@@ -22,8 +22,8 @@ class Position {
 	Position &operator*=(double scalar);
 	Position &operator/=(double scalar);
 
-	auto getAngle() const;
-	auto getLength() const;
+	double getAngle() const;
+	double getLength() const;
 
 	Position rotate(double angle) const;
 	double getDistanceTo(Position other) const;

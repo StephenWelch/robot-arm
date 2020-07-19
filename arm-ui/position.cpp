@@ -37,11 +37,11 @@ Position &Position::operator/=(double scalar) {
 	return *this;
 }
 
-auto Position::getAngle() const {
+double Position::getAngle() const {
 	return atan2(y, x);
 }
 
-auto Position::getLength() const {
+double Position::getLength() const {
 	return sqrt((x*x) + (y*y));
 }
 
