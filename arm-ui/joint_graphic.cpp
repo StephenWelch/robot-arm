@@ -102,14 +102,6 @@ double JointGraphic::getAngle() const {
 	return qDegreesToRadians(this->rotation());
 }
 
-void JointGraphic::setAngleOffset(double angleOffset) {
-	this->angleOffset = angleOffset;
-}
-
-void JointGraphic::zero() {
-	angleOffset = joint->getAngle();
-}
-
 double JointGraphic::qPointFToRadians(const QPointF &point) {
 	double angle = atan2(point.y(), point.x());
 	return angle < 0 ? angle + 2*M_PI : angle;
