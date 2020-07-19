@@ -45,13 +45,13 @@ void JointGraphic::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 	double newJointAngle = normalizeAngleRadians(angleDelta + joint->getAngle(joint));
 	joint->setAngle(newJointAngle);
 
-	updateFromModel();
-
 	if (holdNextJoints) {
 		for (Joint *j = joint->getNext(); j!=nullptr; j = j->getNext()) {
 			j->setAngle(normalizeAngleRadians(j->getAngle(j) - angleDelta));
 			jointToGraphic->at(j)->updateFromModel();
 		}
+	} else {
+		updateFromModel();
 	}
 }
 

@@ -20,25 +20,28 @@ class Joint {
 
  public:
 	Joint(Joint *previous, Joint *next, double length, double minAngle, double maxAngle)
-			: previous(previous), next(next), length(length), minAngle(minAngle), maxAngle(maxAngle) {};
+			: previous(previous), next(next), length(length), minAngle(minAngle), maxAngle(maxAngle
+			) {};
+	Joint(double length, double minAngle, double maxAngle)
+			: previous(nullptr), next(nullptr), length(length), minAngle(minAngle), maxAngle(maxAngle) {};
 
-	auto Joint::getMinAngle() const {
+	auto getMinAngle() const {
 		return minAngle;
 	}
 
-	auto Joint::getMaxAngle() const {
+	auto getMaxAngle() const {
 		return maxAngle;
 	}
 
-	auto Joint::getLength() const {
+	auto getLength() const {
 		return length;
 	}
 
-	auto Joint::getPrevious() const {
+	auto getPrevious() const {
 		return previous;
 	}
 
-	auto Joint::getNext() const {
+	auto getNext() const {
 		return next;
 	}
 
@@ -64,6 +67,7 @@ class Joint {
 	Joint *getEnd() const;
 
 	static void link(Joint *prev, Joint *next);
+	static void link(std::vector<Joint*> jointsToLink);
 	static void solve(Joint *relativeTo, const Joint &targetPos);
 
 };

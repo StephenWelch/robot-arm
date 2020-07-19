@@ -55,22 +55,17 @@ double Joint::getAngle() const {
 
 Position Joint::getEndPosition() const {
 	Position position = getEndPosition(this);
-	const Joint *current = previous;
-	while (current!=nullptr) {
-		position += previous->getEndPosition();
-		current = current->getPrevious();
+	if (previous!=nullptr) {
+		return position + previous->getEndPosition();
 	}
 	return position;
 }
 
 Position Joint::getBasePosition() const {
-	Position position;
-	const Joint *current = previous;
-	while (current!=nullptr) {
-		position += current->getEndPosition();
-		current = current->getPrevious();
+	if (previous!=nullptr) {
+		return previous->getEndPosition();
 	}
-	return position;
+	return {};
 }
 
 Position Joint::getBasePosition(const Joint *relativeTo) const {
@@ -83,17 +78,21 @@ Position Joint::getBasePosition(const Joint *relativeTo) const {
 
 Position Joint::getEndPosition(const Joint *relativeTo) const {
 	if (relativeTo==this) {
-		Position pos = Position(angle);
-		Position scaled = pos*length;
-		return scaled;
+		return Position(getAngle()) * length;
 	} else {
-		return Position(angle) + previous->getEndPosition(relativeTo);
+		return Position(getAngle()) + previous->getEndPosition(relativeTo);
 	}
 }
 
 void Joint::link(Joint *prev, Joint *next) {
 	prev->setNext(next);
 	next->setPrevious(prev);
+}
+
+void Joint::link(std::vector<Joint*> jointsToLink) {
+	for(int i = 0; i < jointsToLink.size() - 1; i++) {
+		link(jointsToLink[i], jointsToLink[i+1]);
+	}
 }
 
 Joint *Joint::getBase() const {

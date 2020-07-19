@@ -32,24 +32,27 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(port, &QSerialPort::readyRead, this, &MainWindow::onPortReadyRead);
 	connect(port, &QSerialPort::errorOccurred, this, &MainWindow::onPortErrorOccurred);
 
-	auto *baseJoint = new Joint(nullptr, nullptr, 80, 0, 360);
-	auto *endJoint = new Joint(nullptr, nullptr, 80, 0, 360);
+	auto *baseJoint = new Joint(80, 0, 360);
+	auto *midJointA = new Joint(80, 0, 360);
+	auto *midJointB = new Joint(80, 0, 360);
+	auto *endJoint = new Joint(80, 0, 360);
 
-	Joint::link(baseJoint, endJoint);
+	Joint::link({baseJoint, midJointA, midJointB, endJoint});
 
 	jointRepresentationMap = new std::unordered_map<Joint *, JointGraphic *>();
 	jointRepresentationMap->insert({
 																		 {baseJoint,
 																			new JointGraphic(80, 40, baseJoint, jointMutex, jointRepresentationMap)},
+																		 {midJointA, new JointGraphic(80, 40, midJointA, jointMutex, jointRepresentationMap)},
+																		 {midJointB, new JointGraphic(80, 40, midJointB, jointMutex, jointRepresentationMap)},
 																		 {endJoint, new JointGraphic(80, 40, endJoint, jointMutex, jointRepresentationMap)}
 																 });
 
 	for (auto pair : *jointRepresentationMap) {
-		// Update with initial state
-		pair.second->updateFromModel();
 		// Add to scene
-		//scene->addItem(pair.second);
+		scene->addItem(pair.second);
 	}
+	jointRepresentationMap->at(baseJoint)->updateFromModel();
 
 	ui->armView->setScene(scene);
 	ui->armView->show();
@@ -60,18 +63,18 @@ MainWindow::MainWindow(QWidget *parent)
 	running = false;
 	firstRun = true;
 
-	auto *circleB = new Circle(60, 60, 50);
-	auto *circleA = new Circle(0, 0, 100);
+//	auto *circleB = new Circle(60, 60, 50);
+//	auto *circleA = new Circle(0, 0, 100);
+//
+//	scene->addItem(new CircleGraphic(*circleA));
+//	scene->addItem(new CircleGraphic(*circleB));
+//
+//	for (const auto &intersectionPoint : circleA->getIntersection(*circleB)) {
+//		auto pointGraphic = new CircleGraphic(intersectionPoint.x, intersectionPoint.y, 5);
+//		pointGraphic->setBrush(Qt::red);
+//		scene->addItem(pointGraphic);
+//	}
 
-	scene->addItem(new CircleGraphic(*circleA));
-	scene->addItem(new CircleGraphic(*circleB));
-
-	for(const auto &intersectionPoint : circleA->getIntersection(*circleB)) {
-		auto pointGraphic = new CircleGraphic(intersectionPoint.x, intersectionPoint.y, 5);
-		pointGraphic->setBrush(Qt::red);
-		scene->addItem(pointGraphic);
-	}
-	
 }
 
 MainWindow::~MainWindow() {
