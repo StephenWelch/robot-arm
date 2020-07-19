@@ -50,7 +50,6 @@ if(ANDROID)
     angle.h
     position.cpp
     position.h
-    geometry.h
     mainwindow.ui
           )
 else()
@@ -67,7 +66,6 @@ else()
     angle.h
     position.cpp
     position.h
-    geometry.h
     mainwindow.ui
           arc.cpp arc.h)
 endif()

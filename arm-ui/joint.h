@@ -7,7 +7,6 @@
 #include <QPainter>
 #include <QPointF>
 #include <QGraphicsSceneMouseEvent>
-#include "geometry.h"
 #include "position.h"
 #include <iostream>
 
