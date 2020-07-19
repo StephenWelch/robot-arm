@@ -40,34 +40,28 @@ if(ANDROID)
   add_library(arm-ui SHARED
     arm-ui
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    joint.cpp
-    joint.h
-    joint_graphic.cpp
-    joint_graphic.h
-    angle.cpp
-    angle.h
-    position.cpp
-    position.h
+    mainwindow.cpp mainwindow.h
+    joint.cpp joint.h
+    joint_graphic.cpp joint_graphic.h
+    angle.cpp angle.h
+    position.cpp position.h
+    circle_graphic.cpp circle_graphic.h
+    arc.cpp arc.h
     mainwindow.ui
-          )
+  )
 else()
   add_executable(
     arm-ui
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    joint.cpp
-    joint.h
-    joint_graphic.cpp
-    joint_graphic.h
-    angle.cpp
-    angle.h
-    position.cpp
-    position.h
+    mainwindow.cpp mainwindow.h
+    joint.cpp joint.h
+    joint_graphic.cpp joint_graphic.h
+    angle.cpp angle.h
+    position.cpp position.h
+    circle_graphic.cpp circle_graphic.h
+    arc.cpp arc.h
     mainwindow.ui
-          arc.cpp arc.h)
+          circle.cpp circle.h)
 endif()
 
 target_link_libraries(arm-ui PRIVATE nlohmann_json::nlohmann_json Qt5::Widgets Qt5::SerialPort)

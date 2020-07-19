@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "joint.h"
+#include "circle_graphic.h"
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QtMath>
@@ -47,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
 		// Update with initial state
 		pair.second->updateFromModel();
 		// Add to scene
-		scene->addItem(pair.second);
+		//scene->addItem(pair.second);
 	}
 
 	ui->armView->setScene(scene);
@@ -59,6 +60,18 @@ MainWindow::MainWindow(QWidget *parent)
 	running = false;
 	firstRun = true;
 
+	auto *circleB = new Circle(60, 60, 50);
+	auto *circleA = new Circle(0, 0, 100);
+
+	scene->addItem(new CircleGraphic(*circleA));
+	scene->addItem(new CircleGraphic(*circleB));
+
+	for(const auto &intersectionPoint : circleA->getIntersection(*circleB)) {
+		auto pointGraphic = new CircleGraphic(intersectionPoint.x, intersectionPoint.y, 5);
+		pointGraphic->setBrush(Qt::red);
+		scene->addItem(pointGraphic);
+	}
+	
 }
 
 MainWindow::~MainWindow() {
