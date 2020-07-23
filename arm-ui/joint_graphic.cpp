@@ -22,8 +22,8 @@ JointGraphic::JointGraphic(double length,
 }
 
 void JointGraphic::updateFromModel() {
-	setAngle(joint->getAngle());
-	Position adjustedPos = joint->getBasePosition().rotate(-M_PI/2);
+	setAngle(joint->getAngleRelativeToOrigin());
+	Position adjustedPos = joint->getBasePositionRelativeToOrigin()/*.rotate(-M_PI/2)*/;
 	setPos(adjustedPos.x, adjustedPos.y);
 
 	if (joint->getNext()!=nullptr) {
@@ -32,8 +32,8 @@ void JointGraphic::updateFromModel() {
 }
 
 QRectF JointGraphic::boundingRect() const {
-//  return QRectF(-width / 2, -width / 2, length + width, width);
-	return QRectF(-width/2, -length - width/2, width, length + width);
+  return QRectF(-width / 2, -width / 2, length + width, width);
+//	return QRectF(-width/2, -length - width/2, width, length + width);
 }
 
 void JointGraphic::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -45,13 +45,13 @@ void JointGraphic::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 	double newJointAngle = normalizeAngleRadians(angleDelta + joint->getAngle(joint));
 	joint->setAngle(newJointAngle);
 
-	updateFromModel();
-
 	if (holdNextJoints) {
 		for (Joint *j = joint->getNext(); j!=nullptr; j = j->getNext()) {
 			j->setAngle(normalizeAngleRadians(j->getAngle(j) - angleDelta));
 			jointToGraphic->at(j)->updateFromModel();
 		}
+	} else {
+		updateFromModel();
 	}
 }
 
@@ -72,23 +72,23 @@ void JointGraphic::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 	painter->setPen(pen);
 
-//  painter->drawPoint(0, 0);
-//  painter->drawPoint(length, 0);
+  painter->drawPoint(0, 0);
+  painter->drawPoint(length, 0);
+
+  path.moveTo(0, width / 2);
+  path.lineTo(length, width / 2);
+  path.arcTo(length - width / 2, -width / 2, width, width, 270, 180);
+  path.lineTo(0, -width / 2);
+  path.arcTo(-width / 2, -width / 2, width, width, 90, 180);
+
+//	painter->drawPoint(0, 0);
+//	painter->drawPoint(0, -length);
 //
-//  path.moveTo(0, width / 2);
-//  path.lineTo(length, width / 2);
-//  path.arcTo(length - width / 2, -width / 2, width, width, 270, 180);
-//  path.lineTo(0, -width / 2);
-//  path.arcTo(-width / 2, -width / 2, width, width, 90, 180);
-
-	painter->drawPoint(0, 0);
-	painter->drawPoint(0, -length);
-
-	path.moveTo(-width/2, 0);
-	path.lineTo(-width/2, -length);
-	path.arcTo(-width/2, -length - width/2, width, width, 180, -180);
-	path.lineTo(width/2, 0);
-	path.arcTo(-width/2, -width/2, width, width, 0, -180);
+//	path.moveTo(-width/2, 0);
+//	path.lineTo(-width/2, -length);
+//	path.arcTo(-width/2, -length - width/2, width, width, 180, -180);
+//	path.lineTo(width/2, 0);
+//	path.arcTo(-width/2, -width/2, width, width, 0, -180);
 
 	painter->strokePath(path, pen);
 //    painter->fillPath(path, brush);
@@ -120,4 +120,11 @@ void JointGraphic::setHoldNextJoints(bool holdNextJoints) {
 
 bool JointGraphic::getHoldNextJoints() const {
 	return holdNextJoints;
+}
+
+void JointGraphic::setColor(QColor color) {
+	this->color = color;
+}
+QColor JointGraphic::getColor() const {
+	return color;
 }

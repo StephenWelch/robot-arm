@@ -7,7 +7,6 @@
 #include <QPainter>
 #include <QPointF>
 #include <QGraphicsSceneMouseEvent>
-#include "geometry.h"
 #include "position.h"
 #include <iostream>
 
@@ -21,25 +20,28 @@ class Joint {
 
  public:
 	Joint(Joint *previous, Joint *next, double length, double minAngle, double maxAngle)
-			: previous(previous), next(next), length(length), minAngle(minAngle), maxAngle(maxAngle) {};
+			: previous(previous), next(next), length(length), minAngle(minAngle), maxAngle(maxAngle
+			) {};
+	Joint(double length, double minAngle, double maxAngle)
+			: previous(nullptr), next(nullptr), length(length), minAngle(minAngle), maxAngle(maxAngle) {};
 
-	auto Joint::getMinAngle() const {
+	auto getMinAngle() const {
 		return minAngle;
 	}
 
-	auto Joint::getMaxAngle() const {
+	auto getMaxAngle() const {
 		return maxAngle;
 	}
 
-	auto Joint::getLength() const {
+	auto getLength() const {
 		return length;
 	}
 
-	auto Joint::getPrevious() const {
+	auto getPrevious() const {
 		return previous;
 	}
 
-	auto Joint::getNext() const {
+	auto getNext() const {
 		return next;
 	}
 
@@ -53,18 +55,21 @@ class Joint {
 	void setNext(Joint *joint);
 
 	double getAngle(const Joint *relativeTo) const;
-	double getAngle() const;
+	double getAngleRelativeToOrigin() const;
 
 	Position getEndPosition(const Joint *relativeTo) const;
-	Position getEndPosition() const;
+	Position getEndPositionRelativeToOrigin() const;
 
 	Position getBasePosition(const Joint *relativeTo) const;
-	Position getBasePosition() const;
+	Position getBasePositionRelativeToOrigin() const;
 
 	Joint *getBase() const;
 	Joint *getEnd() const;
+	std::vector<Joint*> getConsecutiveJoints() const;
 
 	static void link(Joint *prev, Joint *next);
+	static void link(std::vector<Joint*> jointsToLink);
+	static void solve(Joint *relativeTo, const Joint &targetPos);
 
 };
 

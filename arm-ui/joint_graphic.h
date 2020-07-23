@@ -42,6 +42,8 @@ class JointGraphic : public QGraphicsItem {
 	double getAngle() const;
 	void setHoldNextJoints(bool holdNextJoints);
 	bool getHoldNextJoints() const;
+	void setColor(QColor color);
+	QColor getColor() const;
 	void zero();
 
 	static double qPointFToRadians(const QPointF &point);
