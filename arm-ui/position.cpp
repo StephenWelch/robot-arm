@@ -57,11 +57,11 @@ double Position::distanceTo(const Position &other) const {
 }
 
 double Position::angleTo(const Position &other) const {
-	return acos(dot(other) / (abs(getLength()) * abs(other.getLength())));
+	return acos(dot(other)/(abs(getLength())*abs(other.getLength())));
 }
 
 double Position::dot(const Position &other) const {
-	return (x * other.x) + (y * other.y);
+	return (x*other.x) + (y*other.y);
 }
 
 std::ostream &operator<<(std::ostream &stream, const Position &position) {

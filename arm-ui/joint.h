@@ -21,7 +21,7 @@ class Joint {
  public:
 	Joint(Joint *previous, Joint *next, double length, double minAngle, double maxAngle)
 			: previous(previous), next(next), length(length), minAngle(minAngle), maxAngle(maxAngle
-			) {};
+	) {};
 	Joint(double length, double minAngle, double maxAngle)
 			: previous(nullptr), next(nullptr), length(length), minAngle(minAngle), maxAngle(maxAngle) {};
 
@@ -65,10 +65,10 @@ class Joint {
 
 	Joint *getBase() const;
 	Joint *getEnd() const;
-	std::vector<Joint*> getConsecutiveJoints() const;
+	std::vector<Joint *> getConsecutiveJoints() const;
 
 	static void link(Joint *prev, Joint *next);
-	static void link(std::vector<Joint*> jointsToLink);
+	static void link(std::vector<Joint *> jointsToLink);
 	static void solve(Joint *relativeTo, const Joint &targetPos);
 
 };

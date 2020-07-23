@@ -32,7 +32,7 @@ void JointGraphic::updateFromModel() {
 }
 
 QRectF JointGraphic::boundingRect() const {
-  return QRectF(-width / 2, -width / 2, length + width, width);
+	return QRectF(-width/2, -width/2, length + width, width);
 //	return QRectF(-width/2, -length - width/2, width, length + width);
 }
 
@@ -72,14 +72,14 @@ void JointGraphic::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 	painter->setPen(pen);
 
-  painter->drawPoint(0, 0);
-  painter->drawPoint(length, 0);
+	painter->drawPoint(0, 0);
+	painter->drawPoint(length, 0);
 
-  path.moveTo(0, width / 2);
-  path.lineTo(length, width / 2);
-  path.arcTo(length - width / 2, -width / 2, width, width, 270, 180);
-  path.lineTo(0, -width / 2);
-  path.arcTo(-width / 2, -width / 2, width, width, 90, 180);
+	path.moveTo(0, width/2);
+	path.lineTo(length, width/2);
+	path.arcTo(length - width/2, -width/2, width, width, 270, 180);
+	path.lineTo(0, -width/2);
+	path.arcTo(-width/2, -width/2, width, width, 90, 180);
 
 //	painter->drawPoint(0, 0);
 //	painter->drawPoint(0, -length);

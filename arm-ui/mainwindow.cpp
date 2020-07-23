@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	jointRepresentationMap->at(baseJoint)->updateFromModel();
 
-	ui->armView->setTransform(ui->armView->transform().rotateRadians(-M_PI / 2));
+	ui->armView->setTransform(ui->armView->transform().rotateRadians(-M_PI/2));
 	ui->armView->setScene(scene);
 	ui->armView->show();
 
@@ -198,10 +198,9 @@ void MainWindow::onPortErrorOccurred(QSerialPort::SerialPortError error) {
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
 	QWidget::mousePressEvent(event);
-	if(event->button() == Qt::LeftButton) {
-		QPoint remapped = ui->armView->mapFromParent( event->pos() );
-		if ( ui->armView->rect().contains( remapped ) )
-		{
+	if (event->button()==Qt::LeftButton) {
+		QPoint remapped = ui->armView->mapFromParent(event->pos());
+		if (ui->armView->rect().contains(remapped)) {
 			QPointF targetPoint = ui->armView->mapToScene(remapped);
 			Position targetPos = Position(targetPoint.x(), targetPoint.y());
 			calculateIk(targetPos/*, M_PI / 2*/);
@@ -213,29 +212,29 @@ void MainWindow::calculateIk(const Position &targetPos, double targetAngle) {
 	std::scoped_lock lock(*jointMutex);
 
 	// Clear old debug graphics
-	for(const auto& item : ikDebugGraphics) {
+	for (const auto &item : ikDebugGraphics) {
 		scene->removeItem(item);
 	}
 	ikDebugGraphics.clear();
 
 	// Calculate base position of end joint
 	Joint *endJoint = baseJoint->getEnd();
-	Position endBasePosition = targetPos - (Position(targetAngle) * endJoint->getLength());
+	Position endBasePosition = targetPos - (Position(targetAngle)*endJoint->getLength());
 	Position baseBasePosition = baseJoint->getBasePositionRelativeToOrigin();
 
 	// Sum up arm lengths
 	// Take into account that end joint has set angle
 	double totalArmLength = 0;
-	for(Joint *current = baseJoint; current != endJoint; current = current->getNext()) {
+	for (Joint *current = baseJoint; current!=endJoint; current = current->getNext()) {
 		totalArmLength += current->getLength();
 	}
 
 	// Check if target point is in range
-	if((endBasePosition - baseBasePosition).getLength() > totalArmLength) {
+	if ((endBasePosition - baseBasePosition).getLength() > totalArmLength) {
 		return;
 	}
 
-	std::vector<Joint*> joints = baseJoint->getConsecutiveJoints();
+	std::vector<Joint *> joints = baseJoint->getConsecutiveJoints();
 
 	// Find line with smallest angle wrt previous line
 //	double smallestAngle = std::numeric_limits<double>::max();
@@ -249,16 +248,16 @@ void MainWindow::calculateIk(const Position &targetPos, double targetAngle) {
 //					smallestAngleJoint = joint;
 //				}
 //			}
-	Joint *vertexJoint = joints[joints.size() / 2];
+	Joint *vertexJoint = joints[joints.size()/2];
 
 	double lengthA = 0;
-	for(Joint *current = joints[0]; current != vertexJoint; current = current->getNext()) {
+	for (Joint *current = joints[0]; current!=vertexJoint; current = current->getNext()) {
 		lengthA += current->getLength();
 	}
 
 	double lengthB = 0;
 	// Change this to current != nullPtr to ignore target angle
-	for(Joint *current = vertexJoint; current != endJoint; current = current->getNext()) {
+	for (Joint *current = vertexJoint; current!=endJoint; current = current->getNext()) {
 		lengthB += current->getLength();
 	}
 
@@ -272,7 +271,7 @@ void MainWindow::calculateIk(const Position &targetPos, double targetAngle) {
 
 	// Calculate new angles
 //			for(const auto &intersection : intersections) {
-	if(!intersections.empty()) {
+	if (!intersections.empty()) {
 		const auto &intersection = intersections[0];
 		auto baseToIntersection = intersection - baseBasePosition;
 		auto intersectionToEnd = endBasePosition - intersection;
@@ -292,16 +291,18 @@ void MainWindow::calculateIk(const Position &targetPos, double targetAngle) {
 	ikDebugGraphics.push_back(new CircleGraphic(circleA));
 	ikDebugGraphics.push_back(new CircleGraphic(circleB));
 
-	for(const auto& position : intersections) {
-		auto intersectionToBase = new QGraphicsLineItem(QLineF(position.x, position.y, baseBasePosition.x, baseBasePosition.y));
-		auto intersectionToEnd = new QGraphicsLineItem(QLineF(position.x, position.y, endBasePosition.x, endBasePosition.y));
+	for (const auto &position : intersections) {
+		auto intersectionToBase =
+				new QGraphicsLineItem(QLineF(position.x, position.y, baseBasePosition.x, baseBasePosition.y));
+		auto
+				intersectionToEnd = new QGraphicsLineItem(QLineF(position.x, position.y, endBasePosition.x, endBasePosition.y));
 		intersectionToBase->setPen(QPen(Qt::red));
 		intersectionToEnd->setPen(QPen(Qt::red));
 		ikDebugGraphics.push_back(intersectionToBase);
 		ikDebugGraphics.push_back(intersectionToEnd);
 	}
 
-	for(const auto& item : ikDebugGraphics) {
+	for (const auto &item : ikDebugGraphics) {
 		scene->addItem(item);
 	}
 }
@@ -310,7 +311,7 @@ void MainWindow::calculateIk(const Position &targetPos) {
 	std::scoped_lock lock(*jointMutex);
 
 	// Clear old debug graphics
-	for(const auto& item : ikDebugGraphics) {
+	for (const auto &item : ikDebugGraphics) {
 		scene->removeItem(item);
 	}
 	ikDebugGraphics.clear();
@@ -323,16 +324,16 @@ void MainWindow::calculateIk(const Position &targetPos) {
 	// Sum up arm lengths
 	// Take into account that end joint has set angle
 	double totalArmLength = 0;
-	for(Joint *current = baseJoint; current != nullptr; current = current->getNext()) {
+	for (Joint *current = baseJoint; current!=nullptr; current = current->getNext()) {
 		totalArmLength += current->getLength();
 	}
 
 	// Check if target point is in range
-	if((endBasePosition - baseBasePosition).getLength() > totalArmLength) {
+	if ((endBasePosition - baseBasePosition).getLength() > totalArmLength) {
 		return;
 	}
 
-	std::vector<Joint*> joints = baseJoint->getConsecutiveJoints();
+	std::vector<Joint *> joints = baseJoint->getConsecutiveJoints();
 
 	// Find line with smallest angle wrt previous line
 //	double smallestAngle = std::numeric_limits<double>::max();
@@ -346,16 +347,16 @@ void MainWindow::calculateIk(const Position &targetPos) {
 //					smallestAngleJoint = joint;
 //				}
 //			}
-	Joint *vertexJoint = joints[joints.size() / 2];
+	Joint *vertexJoint = joints[joints.size()/2];
 
 	double lengthA = 0;
-	for(Joint *current = joints[0]; current != vertexJoint; current = current->getNext()) {
+	for (Joint *current = joints[0]; current!=vertexJoint; current = current->getNext()) {
 		lengthA += current->getLength();
 	}
 
 	double lengthB = 0;
 	// Change this to current != nullPtr to ignore target angle
-	for(Joint *current = vertexJoint; current != nullptr; current = current->getNext()) {
+	for (Joint *current = vertexJoint; current!=nullptr; current = current->getNext()) {
 		lengthB += current->getLength();
 	}
 
@@ -369,7 +370,7 @@ void MainWindow::calculateIk(const Position &targetPos) {
 
 	// Calculate new angles
 //			for(const auto &intersection : intersections) {
-	if(!intersections.empty()) {
+	if (!intersections.empty()) {
 		const auto &intersection = intersections[0];
 		auto baseToIntersection = intersection - baseBasePosition;
 		auto intersectionToEnd = endBasePosition - intersection;
@@ -389,21 +390,23 @@ void MainWindow::calculateIk(const Position &targetPos) {
 	ikDebugGraphics.push_back(new CircleGraphic(circleA));
 	ikDebugGraphics.push_back(new CircleGraphic(circleB));
 
-	for(const auto& position : intersections) {
-		auto intersectionToBase = new QGraphicsLineItem(QLineF(position.x, position.y, baseBasePosition.x, baseBasePosition.y));
-		auto intersectionToEnd = new QGraphicsLineItem(QLineF(position.x, position.y, endBasePosition.x, endBasePosition.y));
+	for (const auto &position : intersections) {
+		auto intersectionToBase =
+				new QGraphicsLineItem(QLineF(position.x, position.y, baseBasePosition.x, baseBasePosition.y));
+		auto
+				intersectionToEnd = new QGraphicsLineItem(QLineF(position.x, position.y, endBasePosition.x, endBasePosition.y));
 		intersectionToBase->setPen(QPen(Qt::red));
 		intersectionToEnd->setPen(QPen(Qt::red));
 		ikDebugGraphics.push_back(intersectionToBase);
 		ikDebugGraphics.push_back(intersectionToEnd);
 	}
 
-	for(const auto& item : ikDebugGraphics) {
+	for (const auto &item : ikDebugGraphics) {
 		scene->addItem(item);
 	}
 }
 double MainWindow::normalizeAngleDegrees(double degrees) const {
-	while(degrees < 0) degrees += 360;
-	while(degrees > 360) degrees -= 360;
+	while (degrees < 0) degrees += 360;
+	while (degrees > 360) degrees -= 360;
 	return degrees;
 }

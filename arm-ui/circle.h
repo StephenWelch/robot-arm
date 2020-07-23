@@ -17,7 +17,7 @@ class Circle {
 	auto x() const { return center.x; }
 	auto y() const { return center.y; }
 
-	std::vector<Position> getIntersection(const Circle& other) const;
+	std::vector<Position> getIntersection(const Circle &other) const;
 
  private:
 	Position center;

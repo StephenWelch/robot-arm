@@ -19,9 +19,8 @@ class CircleGraphic : public QGraphicsEllipseItem {
 	CircleGraphic(const QPointF &center, double radius) : CircleGraphic(center.x(), center.y(), radius) {};
 	CircleGraphic(const Circle &circle) : CircleGraphic(circle.x(), circle.y(), circle.getRadius()) {};
 
-
 	auto center() const { return this->rect().center(); }
-	auto radius() const { return this->rect().width() / 2; }
+	auto radius() const { return this->rect().width()/2; }
 	auto x() const { return this->rect().center().x(); }
 	auto y() const { return this->rect().center().y(); }
 

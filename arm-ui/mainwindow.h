@@ -63,7 +63,7 @@ class MainWindow : public QMainWindow {
 
 	Joint *baseJoint;
 	std::unordered_map<Joint *, JointGraphic *> *jointRepresentationMap;
-	std::vector<QGraphicsItem*> ikDebugGraphics;
+	std::vector<QGraphicsItem *> ikDebugGraphics;
 
 	void processSerialData();
 	void calculateIk(const Position &targetPos, double targetAngle);
