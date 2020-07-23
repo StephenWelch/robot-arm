@@ -55,16 +55,17 @@ class Joint {
 	void setNext(Joint *joint);
 
 	double getAngle(const Joint *relativeTo) const;
-	double getAngle() const;
+	double getAngleRelativeToOrigin() const;
 
 	Position getEndPosition(const Joint *relativeTo) const;
-	Position getEndPosition() const;
+	Position getEndPositionRelativeToOrigin() const;
 
 	Position getBasePosition(const Joint *relativeTo) const;
-	Position getBasePosition() const;
+	Position getBasePositionRelativeToOrigin() const;
 
 	Joint *getBase() const;
 	Joint *getEnd() const;
+	std::vector<Joint*> getConsecutiveJoints() const;
 
 	static void link(Joint *prev, Joint *next);
 	static void link(std::vector<Joint*> jointsToLink);

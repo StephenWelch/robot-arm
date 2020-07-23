@@ -52,8 +52,16 @@ Position Position::rotate(double angle) const {
 	);
 }
 
-double Position::getDistanceTo(Position other) const {
+double Position::distanceTo(const Position &other) const {
 	return (this->operator-(other)).getLength();
+}
+
+double Position::angleTo(const Position &other) const {
+	return acos(dot(other) / (abs(getLength()) * abs(other.getLength())));
+}
+
+double Position::dot(const Position &other) const {
+	return (x * other.x) + (y * other.y);
 }
 
 std::ostream &operator<<(std::ostream &stream, const Position &position) {

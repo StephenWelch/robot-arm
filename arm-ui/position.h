@@ -26,7 +26,9 @@ class Position {
 	double getLength() const;
 
 	Position rotate(double angle) const;
-	double getDistanceTo(Position other) const;
+	double distanceTo(const Position &other) const;
+	double angleTo(const Position &other) const;
+	double dot(const Position& other) const;
 
 };
 

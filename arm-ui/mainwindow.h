@@ -6,6 +6,7 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QTextStream>
+#include <QMouseEvent>
 #include <unordered_map>
 #include <QTimer>
 #include <mutex>
@@ -45,9 +46,11 @@ class MainWindow : public QMainWindow {
 
 	void on_holdAngleField_stateChanged(int arg1);
 
+	void mousePressEvent(QMouseEvent *event) override;
+
  private:
 	const int SERIAL_TIMEOUT_MS = 3000;
-	const int DATA_SEND_INTERVAL_MS = 20;
+	const int DATA_SEND_INTERVAL_MS = 50;
 
 	Ui::MainWindow *ui;
 	QGraphicsScene *scene;
@@ -58,8 +61,13 @@ class MainWindow : public QMainWindow {
 	bool running;
 	bool firstRun;
 
+	Joint *baseJoint;
 	std::unordered_map<Joint *, JointGraphic *> *jointRepresentationMap;
+	std::vector<QGraphicsItem*> ikDebugGraphics;
 
 	void processSerialData();
+	void calculateIk(const Position &targetPos, double targetAngle);
+	void calculateIk(const Position &targetPos);
+	double normalizeAngleDegrees(double degrees) const;
 };
 #endif // MAINWINDOW_H
