@@ -21,8 +21,6 @@ class CircleGraphic : public QGraphicsEllipseItem {
 
 	auto center() const { return this->rect().center(); }
 	auto radius() const { return this->rect().width()/2; }
-	auto x() const { return this->rect().center().x(); }
-	auto y() const { return this->rect().center().y(); }
 
 };
 

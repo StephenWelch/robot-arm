@@ -47,6 +47,7 @@ class MainWindow : public QMainWindow {
 	void on_holdAngleField_stateChanged(int arg1);
 
 	void mousePressEvent(QMouseEvent *event) override;
+	void mouseMoveEvent(QMouseEvent *event) override;
 
  private:
 	const int SERIAL_TIMEOUT_MS = 3000;
@@ -66,8 +67,11 @@ class MainWindow : public QMainWindow {
 	std::vector<QGraphicsItem *> ikDebugGraphics;
 
 	void processSerialData();
-	void calculateIk(const Position &targetPos, double targetAngle);
+	void updateIkFromMouse(QMouseEvent *event);
+	void calculateIk(const Position &targetPos, const double *targetAngle, Joint *terminatingJoint);
 	void calculateIk(const Position &targetPos);
+	void clearDebugGraphics();
 	double normalizeAngleDegrees(double degrees) const;
+	QPointF positionToQPointF(const Position &position) const;
 };
 #endif // MAINWINDOW_H

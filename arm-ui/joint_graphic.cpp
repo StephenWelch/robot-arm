@@ -73,7 +73,7 @@ void JointGraphic::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	painter->setPen(pen);
 
 	painter->drawPoint(0, 0);
-	painter->drawPoint(length, 0);
+	painter->drawPoint(int(length), 0);
 
 	path.moveTo(0, width/2);
 	path.lineTo(length, width/2);
