@@ -18,6 +18,7 @@ AngleStepper upperRight = AngleStepper(4076, 360, true, AccelStepper::MotorInter
 AngleStepper* allSteppers[] = {&lowerLeft, &lowerRight, &upperLeft, &upperRight};
 const int NUM_STEPPERS = sizeof(allSteppers) / sizeof(AngleStepper*);
 
+// Compute specific document size online
 StaticJsonDocument<31> doc;
 
 /**
@@ -211,10 +212,6 @@ void loop()
 			lowerRight.moveTo(lowerAngle);
 			upperLeft.moveTo(upperAngle);
 			upperRight.moveTo(upperAngle);
-			// Serial.print("Lower: ");
-			// Serial.println(lowerAngle);
-			// Serial.print("Upper: ");
-			// Serial.println(upperAngle);
 		}
 	}
 	
